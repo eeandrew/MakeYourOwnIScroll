@@ -16,10 +16,10 @@
 	 		this.enabled = false;
 	 	},
 	 	_initEvents : function() {
-	 		this.wrapper.addEventListener('mousedown',this,false);
-	 		window.addEventListener('mousemove',this,false);
-	 		window.addEventListener('mousecancel',this,false);
-	 		window.addEventListener('mouseup',this,false);
+	 		utils.addEvent(this.wrapper,'mousedown',this);
+	 		utils.addEvent(window,'mousemove',this);
+	 		utils.addEvent(window,'mousecancel',this);
+	 		utils.addEvent(window,'mouseup',this);
 	 	},
 	 	handleEvent : function(e) {
 	 		switch(e.type) {
