@@ -60,7 +60,7 @@
 	 				this._end(e);
 	 				break;
 	 			case 'transitionend':
-	 				this.scrollerStyle.transitionDuration = 0 + 'ms';
+	 				this._transitionTime(0);
 	 				break;
 	 		}
 	 	},
@@ -103,7 +103,7 @@
 	 	},
 	 	scrollTo : function(x,y,time,easing) {
 	 		this.scrollerStyle.transitionTimingFunction = easing.style;
-	 		this.scrollerStyle.transitionDuration = time + 'ms';
+	 		this._transitionTime(time);
 	 		this._translate(x,y);
 	 	}, 
 	 	_end : function(e) {
