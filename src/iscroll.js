@@ -25,6 +25,15 @@
 	 		this.enabled = false;
 	 	},
 	 	refresh : function() {
+	 		this.wrapperWidth = this.wrapper.clientWidth;
+	 		this.wrapperHeight = this.wrapper.clientHeight;
+
+	 		this.scrollerWidth = this.scroller.offsetWidth;
+	 		this.scrollerHeight = this.scroller.offsetHeight;
+
+	 		this.maxScrollX = this.wrapperWidth - this.scrollerWidth;
+	 		this.maxScrollY = this.wrapperHeight - this.scrollerHeight;
+
 	 		this.wrapperOffset = utils.offset(this.wrapper);
 	 	},
 	 	_initEvents : function() {
@@ -69,7 +78,11 @@
 
 	 		newX = this.x + deltaX;
 	 		newY = this.y + deltaY;
-	 		this._translate(newX,newY);
+
+	 		//边缘检测
+	 		if(newY > 0) newY = 0;
+	 		if(newY < this.maxScrollY) newY = this.maxScrollY;
+	 		this._translate(0,newY);
 	 	},
 	 	_translate : function(x,y) {
 	 		this.scrollerStyle.transform = 'translate(' + x + 'px,' + y + 'px)';
