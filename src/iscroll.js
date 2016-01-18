@@ -48,23 +48,33 @@
 	 		}
 	 	},
 	 	_start : function(e) {
+	 		var point = e;
 	 		this.enable();
 	 		console.log(e.type + ' start');
 	 		this.distX = 0;
 	 		this.distY = 0;
 	 		
-	 		this.pointX = 0;
-	 		this.pointY = 0;
+	 		this.pointX    = point.pageX;
+			this.pointY    = point.pageY;
 	 	},
 	 	_move : function(e) {
 	 		if(!this.enabled) return;
-	 		var point = e,newX,newY;
-	 		newX = this.wrapperOffset.left + point.pageX;
-	 		newY = this.wrapperOffset.top + point.pageY;
+	 		var point = e,
+	 		deltaX = point.pageX - this.pointX,
+	 		deltaY = point.pageY - this.pointY,
+	 		newX,newY;
+
+	 		this.pointX = point.pageX;
+	 		this.pointY = point.pageY;
+
+	 		newX = this.x + deltaX;
+	 		newY = this.y + deltaY;
 	 		this._translate(newX,newY);
 	 	},
 	 	_translate : function(x,y) {
 	 		this.scrollerStyle.transform = 'translate(' + x + 'px,' + y + 'px)';
+	 		this.x = x;
+	 		this.y = y;
 	 	},
 	 	_end : function(e) {
 	 		this.disable();
