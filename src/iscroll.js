@@ -4,8 +4,17 @@
 	 	this.wrapper = document.querySelector(el);
 	 	//拿到里层的scroller
 	 	this.scroller = this.wrapper.children[0];
+	 	//拿到里层scroller的style
+		this.scrollerStyle = this.scroller.style;	 	
 	 	//加入监听器
 	 	this._initEvents();
+	 	//初始值
+	 	this.x = 0;
+	 	this.y = 0;
+	 	this.directionX = 0;
+	 	this.directionY = 0;
+
+	 	this.refresh();
 	 }
 
 	 IScroll.prototype = {
@@ -14,6 +23,9 @@
 	 	},
 	 	disable : function() {
 	 		this.enabled = false;
+	 	},
+	 	refresh : function() {
+	 		this.wrapperOffset = utils.offset(this.wrapper);
 	 	},
 	 	_initEvents : function() {
 	 		utils.addEvent(this.wrapper,'mousedown',this);
@@ -36,12 +48,23 @@
 	 		}
 	 	},
 	 	_start : function(e) {
-	 		console.log(e.type + ' start');
 	 		this.enable();
+	 		console.log(e.type + ' start');
+	 		this.distX = 0;
+	 		this.distY = 0;
+	 		
+	 		this.pointX = 0;
+	 		this.pointY = 0;
 	 	},
 	 	_move : function(e) {
 	 		if(!this.enabled) return;
-	 		console.log(e.type + ' move');
+	 		var point = e,newX,newY;
+	 		newX = this.wrapperOffset.left + point.pageX;
+	 		newY = this.wrapperOffset.top + point.pageY;
+	 		this._translate(newX,newY);
+	 	},
+	 	_translate : function(x,y) {
+	 		this.scrollerStyle.transform = 'translate(' + x + 'px,' + y + 'px)';
 	 	},
 	 	_end : function(e) {
 	 		this.disable();
