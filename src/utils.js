@@ -17,5 +17,16 @@
 			top : top
 		}
 	};
+	me.supportTouch = function() {
+		return 'ontouchstart' in window;
+	};
+	me.rAF = window.requestAnimationFrame || 
+		window.webkitRequestAnimationFrame	||
+		window.mozRequestAnimationFrame		||
+		window.oRequestAnimationFrame		||
+		window.msRequestAnimationFrame		||
+		function(callback){
+			window.setTimeout(callback,1000/60); //模拟60帧
+		};
 	window.utils = me;
 })(window);

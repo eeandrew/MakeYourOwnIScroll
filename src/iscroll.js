@@ -45,17 +45,28 @@
 	 		utils.addEvent(window,'mousemove',this);
 	 		utils.addEvent(window,'mousecancel',this);
 	 		utils.addEvent(window,'mouseup',this);
+
+	 		if(utils.supportTouch()) {
+	 			utils.addEvent(this.wrapper,'touchstart',this);
+	 			utils.addEvent(window,'touchmove',this);
+	 			utils.addEvent(window,'touchcancel',this);
+	 			utils.addEvent(window,'touchend',this);
+	 		}
 	 		utils.addEvent(this.scroller,'transitionend',this);
 	 	},
 	 	handleEvent : function(e) {
 	 		switch(e.type) {
 	 			case 'mousedown' :
+	 			case 'touchstart' :
 	 				this._start(e);
 	 				break;
+	 			case 'touchmove' :
 	 			case 'mousemove' :
 	 				this._move(e);
 	 				break;
+	 			case 'touchend' :
 	 			case 'mousecancel':
+	 			case 'touchcancel' :
 	 			case 'mouseup':
 	 				this._end(e);
 	 				break;
@@ -65,9 +76,9 @@
 	 		}
 	 	},
 	 	_start : function(e) {
-	 		var point = e;
+	 		console.log('_start');
+	 		var point = e.touches ? e.touches[0] : e;
 	 		this.enable();
-	 		console.log(e.type + ' start');
 	 		this.distX = 0;
 	 		this.distY = 0;
 	 		
@@ -78,8 +89,9 @@
 			this.startY = this.y;
 	 	},
 	 	_move : function(e) {
+	 		console.log('_move');
 	 		if(!this.enabled) return;
-	 		var point = e,
+	 		var point = e.touches ? e.touches[0] : e,
 	 		deltaX = point.pageX - this.pointX,
 	 		deltaY = point.pageY - this.pointY,
 	 		newX,newY;
@@ -101,13 +113,16 @@
 	 		this.x = x;
 	 		this.y = y;
 	 	},
+	 	_animate : function(x,y,duration,easingFn) {
+	 		
+	 	},
 	 	scrollTo : function(x,y,time,easing) {
 	 		this.scrollerStyle.transitionTimingFunction = easing.style;
 	 		this._transitionTime(time);
 	 		this._translate(x,y);
 	 	}, 
 	 	_end : function(e) {
-	 		var point = e,
+	 		var point = e.touches ? e.touches[0] : e,
 	 		newX = Math.round(this.x),
 	 		newY = Math.round(this.y),
 	 		distanceX = Math.abs(newX - this.startX),
