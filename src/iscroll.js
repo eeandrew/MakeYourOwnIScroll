@@ -18,6 +18,9 @@
 	 	this.directionX = 0;
 	 	this.directionY = 0;
 
+	 	//事件响应函数集合
+	 	this._events = {};
+
 	 	this.refresh();
 	 }
 
@@ -89,7 +92,6 @@
 			this.startY = this.y;
 	 	},
 	 	_move : function(e) {
-	 		console.log('_move');
 	 		if(!this.enabled) return;
 	 		var point = e.touches ? e.touches[0] : e,
 	 		deltaX = point.pageX - this.pointX,
@@ -107,6 +109,7 @@
 	 			newY = this.options.bounce ? this.y + deltaY /3 : newY > 0 ? 0 :this.maxScrollY;
 	 		}
 	 		this._translate(0,newY);
+	 		this._execEvent('scroll');
 	 	},
 	 	_translate : function(x,y) {
 	 		this.scrollerStyle.transform = 'translate(' + x + 'px,' + y + 'px)';
@@ -135,6 +138,32 @@
 	 	},
 	 	_transitionTime : function(time) {
 	 		this.scrollerStyle.transitionDuration = time + 'ms';
+	 	},
+	 	on : function(type,fn) {
+	 		if(!this._events[type]){
+	 			this._events[type] = [];
+	 		}
+	 		this._events[type].push(fn);
+	 	},
+	 	off : function(type,fn) {
+	 		if(!this._events[type]) {
+	 			return;
+	 		}
+	 		var index = this._events[type].indexOf(fn);
+	 		if(index > -1) {
+	 			this._events[type].splice(index,1);
+	 		}
+	 	},
+	 	_execEvent : function(type) {
+	 		if(!this._events[type]){
+	 			return;
+	 		}
+	 		var i = 0,
+	 		l = this._events[type].length;
+	 		if(!l) return;
+	 		for(;i<l;i++) {
+	 			this._events[type][i].apply(this,[].slice.call(arguments,1));
+	 		}
 	 	},
 	 };
 	 window.IScroll = IScroll;

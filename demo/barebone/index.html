@@ -16,6 +16,9 @@ var myScroll;
 function loaded () {
 	myScroll = new IScroll('#wrapper');
 	console.log('page loaded')
+	myScroll.on('scroll',function(){
+		console.log('scroll');
+	});
 }
 
 </script>
